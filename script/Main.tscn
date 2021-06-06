@@ -1,0 +1,203 @@
+[gd_scene load_steps=17 format=2]
+
+[ext_resource path="res://script/Car.gd" type="Script" id=1]
+[ext_resource path="res://script/Enemies.gd" type="Script" id=2]
+[ext_resource path="res://script/Spaceship.gd" type="Script" id=3]
+[ext_resource path="res://prototypes/Prototype-1-car.gd" type="Script" id=4]
+[ext_resource path="res://assets/main_theme.tres" type="Theme" id=5]
+[ext_resource path="res://assets/font-64.tres" type="DynamicFont" id=6]
+[ext_resource path="res://assets/m5x7.ttf" type="DynamicFontData" id=7]
+[ext_resource path="res://script/CornerAreas.gd" type="Script" id=8]
+[ext_resource path="res://assets/UFO.png" type="Texture" id=9]
+
+[sub_resource type="Curve2D" id=1]
+_data = {
+"points": PoolVector2Array( 0, 0, 0, 0, -448, -256, 0, 0, 0, 0, 448, -256 )
+}
+
+[sub_resource type="RectangleShape2D" id=2]
+extents = Vector2( 480, 24 )
+
+[sub_resource type="RectangleShape2D" id=3]
+extents = Vector2( 16, 16 )
+
+[sub_resource type="DynamicFont" id=4]
+size = 32
+font_data = ExtResource( 7 )
+
+[sub_resource type="DynamicFont" id=5]
+size = 32
+font_data = ExtResource( 7 )
+
+[sub_resource type="RectangleShape2D" id=6]
+extents = Vector2( 8, 208 )
+
+[sub_resource type="RectangleShape2D" id=7]
+extents = Vector2( 8, 224 )
+
+[node name="Main" type="Node2D"]
+script = ExtResource( 4 )
+
+[node name="Enemies" type="Node2D" parent="."]
+script = ExtResource( 2 )
+
+[node name="SpawnPath" type="Path2D" parent="Enemies"]
+curve = SubResource( 1 )
+__meta__ = {
+"_edit_group_": true
+}
+
+[node name="PathFollow2D" type="PathFollow2D" parent="Enemies/SpawnPath"]
+position = Vector2( -448, -256 )
+rotation = 7.76042e-06
+
+[node name="Timer" type="Timer" parent="Enemies"]
+wait_time = 1.5
+
+[node name="WaveTimer" type="Timer" parent="Enemies"]
+wait_time = 10.0
+
+[node name="Spaceship" type="StaticBody2D" parent="."]
+position = Vector2( 0, 168 )
+script = ExtResource( 3 )
+
+[node name="Sprite" type="Sprite" parent="Spaceship"]
+position = Vector2( 0, -48 )
+texture = ExtResource( 9 )
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Spaceship"]
+shape = SubResource( 2 )
+
+[node name="Tween" type="Tween" parent="Spaceship"]
+
+[node name="ColorRect" type="ColorRect" parent="Spaceship"]
+visible = false
+margin_left = -448.0
+margin_top = -24.0
+margin_right = 448.0
+margin_bottom = 24.0
+color = Color( 0.454902, 0.505882, 0.490196, 1 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Car" type="KinematicBody2D" parent="." groups=[
+"player",
+]]
+position = Vector2( 0, 128 )
+script = ExtResource( 1 )
+__meta__ = {
+"_edit_group_": true
+}
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Car"]
+shape = SubResource( 3 )
+
+[node name="Tween" type="Tween" parent="Car"]
+
+[node name="ColorRect" type="ColorRect" parent="Car"]
+margin_left = -16.0
+margin_top = -16.0
+margin_right = 16.0
+margin_bottom = 16.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="VisibilityNotifier2D" type="VisibilityNotifier2D" parent="Car"]
+position = Vector2( 0, -128 )
+
+[node name="ComboUI" type="VBoxContainer" parent="Car"]
+margin_left = -48.0
+margin_top = -88.0
+margin_right = 48.0
+margin_bottom = 16.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Message" type="Label" parent="Car/ComboUI"]
+margin_right = 96.0
+margin_bottom = 26.0
+custom_fonts/font = SubResource( 4 )
+align = 1
+
+[node name="Counter" type="Label" parent="Car/ComboUI"]
+modulate = Color( 0.282353, 0.941176, 0.0941176, 1 )
+margin_top = 30.0
+margin_right = 96.0
+margin_bottom = 56.0
+custom_fonts/font = SubResource( 5 )
+align = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="ComboTimer" type="Timer" parent="Car"]
+one_shot = true
+
+[node name="Camera2D" type="Camera2D" parent="."]
+current = true
+
+[node name="UI" type="Control" parent="."]
+anchor_right = 1.0
+anchor_bottom = 1.0
+theme = ExtResource( 5 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Score" type="Label" parent="UI"]
+margin_left = -496.0
+margin_top = -288.0
+margin_right = -424.0
+margin_bottom = -240.0
+custom_fonts/font = ExtResource( 6 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="FinalScore" type="Label" parent="UI"]
+visible = false
+margin_left = -24.0
+margin_top = -64.0
+margin_right = 24.0
+margin_bottom = -50.0
+custom_fonts/font = ExtResource( 6 )
+align = 1
+
+[node name="ScoreTimer" type="Timer" parent="."]
+wait_time = 0.7
+
+[node name="CornerAreas" type="Node2D" parent="."]
+script = ExtResource( 8 )
+
+[node name="Left" type="Area2D" parent="CornerAreas"]
+position = Vector2( -488, 0 )
+__meta__ = {
+"_edit_group_": true
+}
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="CornerAreas/Left"]
+shape = SubResource( 6 )
+
+[node name="Right" type="Area2D" parent="CornerAreas"]
+position = Vector2( 488, 0 )
+__meta__ = {
+"_edit_group_": true
+}
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="CornerAreas/Right"]
+shape = SubResource( 7 )
+
+[connection signal="timeout" from="Enemies/Timer" to="Enemies" method="_on_Timer_timeout"]
+[connection signal="timeout" from="Enemies/WaveTimer" to="Enemies" method="_on_WaveTimer_timeout"]
+[connection signal="combo_ended" from="Car" to="." method="_on_Car_combo_ended"]
+[connection signal="dead" from="Car" to="." method="_on_Car_dead"]
+[connection signal="screen_exited" from="Car/VisibilityNotifier2D" to="Car" method="_on_VisibilityNotifier2D_screen_exited"]
+[connection signal="timeout" from="Car/ComboTimer" to="Car" method="_on_ComboTimer_timeout"]
+[connection signal="timeout" from="ScoreTimer" to="." method="_on_ScoreTimer_timeout"]
+[connection signal="body_entered" from="CornerAreas/Left" to="CornerAreas" method="_on_Corner_body_entered"]
+[connection signal="body_exited" from="CornerAreas/Left" to="CornerAreas" method="_on_Corner_body_exited"]
+[connection signal="body_entered" from="CornerAreas/Right" to="CornerAreas" method="_on_Corner_body_entered"]
+[connection signal="body_exited" from="CornerAreas/Right" to="CornerAreas" method="_on_Corner_body_exited"]
