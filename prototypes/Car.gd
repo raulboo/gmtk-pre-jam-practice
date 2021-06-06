@@ -1,5 +1,7 @@
 extends KinematicBody2D
 
+signal dead
+
 export var acceleration : float = 5
 export var friction_coefficient : float = 0.95
 
@@ -21,3 +23,12 @@ func _physics_process(_delta):
 	
 	
 	velocity = move_and_slide(velocity)
+
+
+func tilt(angle):
+	pass
+	
+	
+func die():
+	emit_signal("dead")
+	self.queue_free()
